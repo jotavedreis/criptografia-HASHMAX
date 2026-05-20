@@ -111,10 +111,10 @@ const members = [
   },
   {
     name: 'Jorge Hermes',
-    role: 'QA',
+    role: 'Tech Leader',
     photo: 'https://avatars.githubusercontent.com/u/91022739?v=4',
     github: 'https://github.com/jhermesn',
-    description: 'Responsável pela garantia de qualidade do projeto, realizando testes rigorosos, identificando bugs e sugerindo melhorias para assegurar um produto final robusto e confiável.'
+    description: 'Responsável pela liderança técnica da equipe, garantindo o desenvolvimento de soluções eficientes, promovendo boas práticas e alinhando tecnologia aos objetivos do projeto.'
   },
   {
     name: 'Júlio Brandão',
@@ -140,28 +140,28 @@ const members = [
   {
     name: 'Daniel Piedade',
     role: 'Ajudante',
-    photo: '/public/foto-danielpiedade.jpg',
-    github: '#',
+    photo: 'public/foto-danielpiedade.jpg',
+    github: 'https://github.com/daniel7365',
     description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
   },
   {
     name: 'Andre Felipe',
     role: 'Ajudante',
-    photo: '/public/foto-andre.jpeg',
-    github: '#',
+    photo: 'public/foto-andre.jpeg',
+    github: 'https://github.com/Andre-Moura-75',
     description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
   },
   {
     name: 'Wesley de Oliveira',
     role: 'Ajudante',
-    photo: '/public/foto-wesley.jpg',
+    photo: 'public/foto-wesley.jpg',
     github: 'https://github.com/wes7t',
     description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
   },
   {
     name: 'Jorge Eduardo',
     role: 'Ajudante',
-    photo: '/public/foto-jorgeeduardo.jpeg',
+    photo: 'public/foto-jorgeeduardo.jpeg',
     github: 'https://github.com/jorgeeduSG',
     description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
   },

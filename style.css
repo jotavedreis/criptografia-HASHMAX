@@ -164,7 +164,7 @@ textarea.out{color:var(--text);background:rgba(8,10,20,.88);border-color:rgba(25
 .h-op{color:#edf8ed;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase}
 .h-algo{color:var(--muted);font-size:.65rem;margin-top:.15rem}
 .h-result{color:var(--text);font-size:.7rem;word-break:break-all;display:-webkit-box;
-  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:.4rem 0}
+  -webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:.4rem 0}
 .h-time{color:var(--muted);font-size:.65rem}
 .h-copy{background:transparent;border:none;color:#dffef0;cursor:pointer;padding:.2rem;font-size:.9rem}
 .h-copy:hover{color:#fff}

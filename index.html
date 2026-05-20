@@ -22,7 +22,7 @@
       <span class="logo-icon">&gt;_</span>
       <div>
         <h1>Hash<span>Max</span></h1>
-        <div class="tagline">CRIPTOGRAFIA EM PRETO E VERDE</div>
+        <div class="tagline">SISTEMA DE CRIPTOGRAFIA</div>
       </div>
     </div>
     <button class="history-btn" onclick="openHistory()">
@@ -45,17 +45,19 @@
       <div>
         <div class="field">
           <label class="lbl">Formato</label>
-          <select id="enc-algo">
+          <select id="enc-algo" onchange="updateAlgoInfo('enc-algo','enc-algo-info')">
             <option value="base64">Base64</option>
             <option value="hex">Hex</option>
             <option value="binary">Binário</option>
             <option value="url">URL</option>
             <option value="morse">Morse</option>
           </select>
+          <div class="algo-info" id="enc-algo-info"></div>
         </div>
         <div class="field">
           <label class="lbl">Entrada</label>
-          <textarea id="enc-input" rows="10" placeholder="Digite ou carregue um texto"></textarea>
+          <textarea id="enc-input" rows="10" placeholder="Digite ou carregue um texto" oninput="updateCharCounter('enc-input')"></textarea>
+          <div class="char-counter" id="enc-input-counter">0 caracteres</div>
           <div class="upload-area">
             <input type="file" id="enc-file" class="hidden-input" accept=".txt,.json,.xml,.csv" onchange="loadFile('enc-input','enc-file','enc-filename')">
             <button class="upload-btn" onclick="document.getElementById('enc-file').click()">
@@ -66,6 +68,7 @@
         <div class="btn-row">
           <button class="btn btn-primary" onclick="encode()">Codificar</button>
           <button class="btn btn-outline" onclick="decode()">Decodificar</button>
+          <button class="btn btn-outline btn-danger-soft" onclick="clearPanel('encoding')" title="Limpar todos os campos">✕ Limpar</button>
         </div>
       </div>
       <div>
@@ -73,6 +76,7 @@
         <textarea id="enc-output" class="out" rows="14" readonly placeholder="O resultado aparece aqui"></textarea>
         <div class="btn-row spaced-row">
           <button class="btn btn-outline" onclick="copyResult('enc-output')">Copiar saída</button>
+          <button class="btn btn-outline" onclick="useOutputAsInput('enc-output','enc-input')" title="Usar saída como entrada para a próxima operação">↩ Usar como entrada</button>
         </div>
       </div>
     </div>
@@ -136,20 +140,20 @@
           <textarea id="asym-input" rows="5" placeholder="Digite o texto"></textarea>
         </div>
         <div class="field">
-            <div class="field-header">
+          <div class="field-header">
             <label class="lbl">Chave Pública</label>
-              <button class="btn btn-outline btn-compact" onclick="copyResult('asym-pubkey')">⎘ Copiar</button>
+            <button class="btn btn-outline btn-compact" onclick="copyResult('asym-pubkey')">⎘ Copiar</button>
           </div>
           <textarea id="asym-pubkey" rows="4" placeholder="Cole ou gere a chave pública"></textarea>
         </div>
         <div class="field">
-            <div class="field-header">
+          <div class="field-header">
             <label class="lbl">Chave Privada</label>
-              <button class="btn btn-outline btn-compact" onclick="copyResult('asym-privkey')">⎘ Copiar</button>
+            <button class="btn btn-outline btn-compact" onclick="copyResult('asym-privkey')">⎘ Copiar</button>
           </div>
           <textarea id="asym-privkey" rows="4" placeholder="Cole ou gere a chave privada"></textarea>
         </div>
-          <button class="btn btn-outline btn-block spaced-bottom" id="keygen-btn" onclick="genKeyPair()">
+        <button class="btn btn-outline btn-block spaced-bottom" id="keygen-btn" onclick="genKeyPair()">
           Gerar chaves
         </button>
         <div class="btn-row">
@@ -224,14 +228,14 @@
 <!-- Members Modal -->
 <div id="members-modal" class="members-modal" aria-hidden="true" onclick="closeMembersModal(event)">
   <div class="members-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="members-modal-title">
+    <button class="modal-close-x" onclick="closeMembersModal()" aria-label="Fechar">✕</button>
     <div class="members-header">
       <div>
         <p class="members-kicker">EQUIPE</p>
         <h2 id="members-modal-title">Membros</h2>
-        <p class="members-subtitle">Exemplos de membros definidos no código. Depois você pode trocar os nomes e fotos direto aqui no arquivo.</p>
+        <p class="members-subtitle">Conheça os integrantes da equipe que desenvolveu o HashMax.</p>
       </div>
     </div>
-
     <div class="members-list-wrap">
       <div class="members-list" id="members-list"></div>
     </div>
@@ -241,6 +245,7 @@
 <!-- QR Modal -->
 <div id="qr-modal" class="members-modal" aria-hidden="true" onclick="closeQrModal(event)">
   <div class="members-modal-dialog qr-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+    <button class="modal-close-x" onclick="closeQrModal()" aria-label="Fechar">✕</button>
     <div class="members-header">
       <div>
         <p class="members-kicker">REPOSITÓRIO</p>
@@ -249,7 +254,6 @@
       </div>
       <button class="btn btn-outline btn-block members-top-btn" onclick="closeQrModal()">Fechar</button>
     </div>
-
     <div class="qr-card">
       <img
         class="qr-image"

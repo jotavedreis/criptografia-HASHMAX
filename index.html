@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>HashMax — Sistema de Criptografia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -250,19 +250,33 @@
       <div>
         <p class="members-kicker">REPOSITÓRIO</p>
         <h2 id="qr-modal-title">QR Code</h2>
-        <p class="members-subtitle">Escaneie o código para abrir o repositório do HashMax no GitHub.</p>
+        <p class="members-subtitle">Escaneie os códigos para acessar o repositório e a página do HashMax.</p>
       </div>
       <button class="btn btn-outline btn-block members-top-btn" onclick="closeQrModal()">Fechar</button>
     </div>
-    <div class="qr-card">
-      <img
-        class="qr-image"
-        src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=https%3A%2F%2Fgithub.com%2Fjotavedreis%2Fcriptografia-HASHMAX"
-        alt="QR Code do repositório GitHub do HashMax"
-      >
-      <a class="qr-link" href="https://github.com/jotavedreis/criptografia-HASHMAX" target="_blank" rel="noopener noreferrer">
-        https://github.com/jotavedreis/criptografia-HASHMAX
-      </a>
+    <div class="qr-container">
+      <div class="qr-card">
+        <h2>Repositório GitHub</h2>
+        <img
+          class="qr-image"
+          src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=https%3A%2F%2Fgithub.com%2Fjotavedreis%2Fcriptografia-HASHMAX"
+          alt="QR Code do repositório GitHub do HashMax"
+        >
+        <a class="qr-link" href="https://github.com/jotavedreis/criptografia-HASHMAX" target="_blank" rel="noopener noreferrer">
+          https://github.com/jotavedreis/criptografia-HASHMAX
+        </a>
+      </div>
+      <div class="qr-card">
+        <h2>Página do HashMax</h2>
+        <img
+          class="qr-image"
+          src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=https%3A%2F%2Fjotavedreis.github.io%2Fcriptografia-HASHMAX%2F"
+          alt="QR Code da página GitHub Pages do HashMax"
+        >
+        <a class="qr-link" href="https://jotavedreis.github.io/criptografia-HASHMAX/" target="_blank" rel="noopener noreferrer">
+          https://jotavedreis.github.io/criptografia-HASHMAX/
+        </a>
+      </div>
     </div>
   </div>
 </div>

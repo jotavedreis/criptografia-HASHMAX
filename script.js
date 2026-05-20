@@ -203,17 +203,17 @@ const members = [
     description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
   },
   {
-    name: 'Wesley de Oliveira',
-    role: 'Ajudante',
-    photo: 'public/foto-wesley.jpg',
-    github: 'https://github.com/wes7t',
-    description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
-  },
-  {
     name: 'Jorge Eduardo',
     role: 'Ajudante',
     photo: 'public/foto-jorgeeduardo.jpeg',
     github: 'https://github.com/jorgeeduSG',
+    description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
+  },
+  {
+    name: 'Wesley de Oliveira',
+    role: 'Ajudante',
+    photo: 'public/foto-wesley.jpg',
+    github: 'https://github.com/wes7t',
     description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
   },
 ];
@@ -438,6 +438,60 @@ function decode(){
   } catch(e){toast('Erro ao decodificar: '+e.message,'error')}
 }
 
+// ─── Drag & Drop ─────────────────────────────────────────────────────────────
+function setupDragDrop(){
+  const dropzones=[
+    {input:'enc-input',file:'enc-file',name:'enc-filename'},
+    {input:'sym-input',file:'sym-file',name:'sym-filename'},
+    {input:'asym-input',file:null,name:null},
+    {input:'hash-input',file:'hash-file',name:'hash-filename'}
+  ];
+  
+  dropzones.forEach(zone=>{
+    const input=document.getElementById(zone.input);
+    if(!input)return;
+    
+    input.addEventListener('dragover',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      input.classList.add('dragover');
+    });
+    
+    input.addEventListener('dragleave',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      input.classList.remove('dragover');
+    });
+    
+    input.addEventListener('drop',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      input.classList.remove('dragover');
+      
+      const files=e.dataTransfer.files;
+      if(!files.length)return;
+      
+      const file=files[0];
+      if(!file.type.startsWith('text/')&&file.type!=='application/json'&&file.type!=='application/xml'){
+        toast('Apenas arquivos de texto são permitidos','error');
+        return;
+      }
+      
+      const reader=new FileReader();
+      reader.onload=evt=>{
+        input.value=evt.target.result;
+        if(zone.name)document.getElementById(zone.name).textContent=file.name;
+        const counter=document.getElementById(zone.input+'-counter');
+        if(counter)updateCharCounter(zone.input);
+        toast(`Arquivo carregado: ${file.name}`,'success');
+      };
+      reader.onerror=()=>toast('Erro ao ler o arquivo','error');
+      reader.readAsText(file);
+    });
+  });
+}
+
 // init
 renderHistory();
 renderMembers();
+setupDragDrop();

@@ -170,7 +170,7 @@ const members = [
   {
     name: 'Júlio Brandão',
     role: 'Idealizador',
-    photo: '/public/foto-juliobrandao.jpg',
+    photo: 'public/foto-juliobrandao.jpg',
     github: 'https://github.com/juliokauan',
     description: 'Co-idealizador, contribuiu com a concepção do projeto, definição de funcionalidades e estratégias de implementação.'
   },
@@ -185,7 +185,7 @@ const members = [
     name: 'Bruno Santiago',
     role: 'Desenvolvedor Back-end',
     photo: 'https://avatars.githubusercontent.com/u/179386822?v=4',
-    github: 'https://github.com/Bruno-dev1s',
+    github: 'https://github.com/Bruno-dev1',
     description: 'Responsável pelo desenvolvimento do backend, implementação de lógica de negócio e integração com bancos de dados.'
   },
   {

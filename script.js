@@ -96,8 +96,59 @@ function loadFile(inputId,fileId,nameId){
   if(!f)return;
   const r=new FileReader();
   r.onload=e=>{document.getElementById(inputId).value=e.target.result;
-    document.getElementById(nameId).textContent=f.name;toast(`Arquivo carregado: ${f.name}`,'success')};
+    document.getElementById(nameId).textContent=f.name;
+    // atualiza contador se existir
+    updateCharCounter(inputId);
+    toast(`Arquivo carregado: ${f.name}`,'success')};
   r.readAsText(f);
+}
+
+// ─── Novas funções (suas adições) ────────────────────────────────────────────
+
+// Exibe descrição do algoritmo de codificação selecionado
+function updateAlgoInfo(selectId, infoId){
+  const algo=document.getElementById(selectId).value;
+  const info=document.getElementById(infoId);
+  if(!info)return;
+  const descriptions={
+    base64:'Codifica dados binários em texto ASCII usando 64 caracteres (A–Z, a–z, 0–9, +, /).',
+    hex:'Representa cada byte como dois dígitos hexadecimais (0–9, A–F).',
+    binary:'Converte cada caractere para sua representação binária de 8 bits.',
+    url:'Codifica caracteres especiais para uso seguro em URLs (RFC 3986).',
+    morse:'Converte texto em código Morse usando pontos (.) e traços (-).'
+  };
+  info.textContent=descriptions[algo]||'';
+}
+
+// Atualiza contador de caracteres de um textarea
+function updateCharCounter(inputId){
+  const input=document.getElementById(inputId);
+  const counter=document.getElementById(inputId+'-counter');
+  if(!input||!counter)return;
+  const len=input.value.length;
+  counter.textContent=len===1?'1 caractere':`${len} caracteres`;
+}
+
+// Limpa todos os campos de um painel
+function clearPanel(panelName){
+  const panel=document.getElementById('panel-'+panelName);
+  if(!panel)return;
+  panel.querySelectorAll('textarea, input[type=text]').forEach(el=>el.value='');
+  // reseta contadores
+  panel.querySelectorAll('.char-counter').forEach(el=>el.textContent='0 caracteres');
+  toast('Campos limpos!','success');
+}
+
+// Usa a saída como nova entrada (encadeamento de operações)
+function useOutputAsInput(outputId, inputId){
+  const output=document.getElementById(outputId);
+  const input=document.getElementById(inputId);
+  if(!output||!input)return;
+  if(!output.value.trim()){toast('Nenhuma saída para usar!','error');return}
+  input.value=output.value;
+  updateCharCounter(inputId);
+  input.focus();
+  toast('Saída copiada para a entrada!','success');
 }
 
 // ─── Members (static examples) ──────────────────────────────────────────────
@@ -111,10 +162,10 @@ const members = [
   },
   {
     name: 'Jorge Hermes',
-    role: 'QA',
+    role: 'Tech Leader',
     photo: 'https://avatars.githubusercontent.com/u/91022739?v=4',
     github: 'https://github.com/jhermesn',
-    description: 'Responsável pela garantia de qualidade do projeto, realizando testes rigorosos, identificando bugs e sugerindo melhorias para assegurar um produto final robusto e confiável.'
+    description: 'Responsável pela liderança técnica da equipe, garantindo o desenvolvimento de soluções eficientes, promovendo boas práticas e alinhando tecnologia aos objetivos do projeto.'
   },
   {
     name: 'Júlio Brandão',
@@ -141,14 +192,14 @@ const members = [
     name: 'Daniel Piedade',
     role: 'Ajudante',
     photo: 'public/foto-danielpiedade.jpg',
-    github: '#',
+    github: 'https://github.com/daniel7365',
     description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
   },
   {
     name: 'Andre Felipe',
     role: 'Ajudante',
     photo: 'public/foto-andre.jpeg',
-    github: '#',
+    github: 'https://github.com/Andre-Moura-75',
     description: 'Contribuiu com testes, documentação e suporte geral ao projeto, auxiliando em diversas tarefas para garantir a qualidade do produto final.'
   },
   {

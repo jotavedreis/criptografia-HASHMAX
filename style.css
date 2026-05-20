@@ -124,6 +124,10 @@ select option{background:#0a0a0f;color:#eef3ff}
 .output-label{font-size:.65rem;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.4rem}
 textarea.out{color:var(--text);background:rgba(8,10,20,.88);border-color:rgba(255,255,255,.1)}
 
+/* Coluna de saída alinhada */
+.panel .grid-2>div:last-child{display:flex;flex-direction:column;gap:.5rem}
+.panel .grid-2>div:last-child textarea.out{flex:1;resize:none;min-height:220px}
+
 /* Informação do algoritmo selecionado (sua adição) */
 .algo-info{font-size:.62rem;color:var(--green-soft);letter-spacing:.04em;line-height:1.5;
   min-height:1.2em;padding:.3rem 0;transition:opacity .2s ease}

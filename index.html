@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HashMax — Sistema de Criptografia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.3.2/jsencrypt.min.js"></script>
+<link rel="shortcut icon" href="/public/favicon_io/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+<canvas id="matrix-bg"></canvas>
+
+<div id="app">
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <span class="logo-icon">&gt;_</span>
+      <div>
+        <h1>Hash<span>Max</span></h1>
+        <div class="tagline">CRIPTOGRAFIA EM PRETO E VERDE</div>
+      </div>
+    </div>
+    <button class="history-btn" onclick="openHistory()">
+      ⏱ HISTÓRICO
+    </button>
+  </header>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('encoding',this)">Codificação</button>
+    <button class="tab" onclick="switchTab('symmetric',this)">Simétrica</button>
+    <button class="tab" onclick="switchTab('asymmetric',this)">Assimétrica</button>
+    <button class="tab" onclick="switchTab('hash',this)">Hashing</button>
+  </div>
+
+  <!-- ENCODING -->
+  <div id="panel-encoding" class="panel active">
+    <div class="panel-title">CODIFICAÇÃO</div>
+    <div class="grid-2">
+      <div>
+        <div class="field">
+          <label class="lbl">Formato</label>
+          <select id="enc-algo">
+            <option value="base64">Base64</option>
+            <option value="hex">Hex</option>
+            <option value="binary">Binário</option>
+            <option value="url">URL</option>
+            <option value="morse">Morse</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="lbl">Entrada</label>
+          <textarea id="enc-input" rows="10" placeholder="Digite ou carregue um texto"></textarea>
+          <div class="upload-area">
+            <input type="file" id="enc-file" class="hidden-input" accept=".txt,.json,.xml,.csv" onchange="loadFile('enc-input','enc-file','enc-filename')">
+            <button class="upload-btn" onclick="document.getElementById('enc-file').click()">
+              ↑ <span id="enc-filename">Carregar arquivo</span>
+            </button>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="encode()">Codificar</button>
+          <button class="btn btn-outline" onclick="decode()">Decodificar</button>
+        </div>
+      </div>
+      <div>
+        <div class="output-label">Saída</div>
+        <textarea id="enc-output" class="out" rows="14" readonly placeholder="O resultado aparece aqui"></textarea>
+        <div class="btn-row spaced-row">
+          <button class="btn btn-outline" onclick="copyResult('enc-output')">Copiar saída</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYMMETRIC -->
+  <div id="panel-symmetric" class="panel">
+    <div class="panel-title">SIMÉTRICA</div>
+    <div class="grid-2">
+      <div>
+        <div class="field">
+          <label class="lbl">Algoritmo</label>
+          <select id="sym-algo">
+            <option value="AES">AES-256</option>
+            <option value="AES128">AES-128</option>
+            <option value="DES">DES</option>
+            <option value="TripleDES">3DES</option>
+            <option value="Rabbit">Rabbit</option>
+            <option value="RC4">RC4</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="lbl">Entrada</label>
+          <textarea id="sym-input" rows="8" placeholder="Digite ou carregue um texto"></textarea>
+          <div class="upload-area">
+            <input type="file" id="sym-file" class="hidden-input" accept=".txt,.json,.xml,.csv" onchange="loadFile('sym-input','sym-file','sym-filename')">
+            <button class="upload-btn" onclick="document.getElementById('sym-file').click()">
+              ↑ <span id="sym-filename">Carregar arquivo</span>
+            </button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="lbl">Chave</label>
+          <div class="key-row">
+            <input type="text" id="sym-key" placeholder="Digite ou gere uma chave">
+            <button class="btn-icon" onclick="genSymKey()" title="Gerar chave aleatória">⚙</button>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="symProcess(true)">Criptografar</button>
+          <button class="btn btn-outline" onclick="symProcess(false)">Descriptografar</button>
+        </div>
+      </div>
+      <div>
+        <div class="output-label">Saída</div>
+        <textarea id="sym-output" class="out" rows="14" readonly placeholder="O resultado aparece aqui"></textarea>
+        <div class="btn-row spaced-row">
+          <button class="btn btn-outline" onclick="copyResult('sym-output')">Copiar saída</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASYMMETRIC -->
+  <div id="panel-asymmetric" class="panel">
+    <div class="panel-title">ASSIMÉTRICA RSA</div>
+    <div class="grid-2">
+      <div>
+        <div class="field">
+          <label class="lbl">Entrada</label>
+          <textarea id="asym-input" rows="5" placeholder="Digite o texto"></textarea>
+        </div>
+        <div class="field">
+            <div class="field-header">
+            <label class="lbl">Chave Pública</label>
+              <button class="btn btn-outline btn-compact" onclick="copyResult('asym-pubkey')">⎘ Copiar</button>
+          </div>
+          <textarea id="asym-pubkey" rows="4" placeholder="Cole ou gere a chave pública"></textarea>
+        </div>
+        <div class="field">
+            <div class="field-header">
+            <label class="lbl">Chave Privada</label>
+              <button class="btn btn-outline btn-compact" onclick="copyResult('asym-privkey')">⎘ Copiar</button>
+          </div>
+          <textarea id="asym-privkey" rows="4" placeholder="Cole ou gere a chave privada"></textarea>
+        </div>
+          <button class="btn btn-outline btn-block spaced-bottom" id="keygen-btn" onclick="genKeyPair()">
+          Gerar chaves
+        </button>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="asymProcess(true)">Criptografar</button>
+          <button class="btn btn-outline" onclick="asymProcess(false)">Descriptografar</button>
+        </div>
+      </div>
+      <div>
+        <div class="output-label">Saída</div>
+        <textarea id="asym-output" class="out" rows="20" readonly placeholder="O resultado aparece aqui"></textarea>
+        <div class="btn-row spaced-row">
+          <button class="btn btn-outline" onclick="copyResult('asym-output')">Copiar saída</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HASHING -->
+  <div id="panel-hash" class="panel">
+    <div class="panel-title">HASHING</div>
+    <div class="grid-2">
+      <div>
+        <div class="field">
+          <label class="lbl">Algoritmo</label>
+          <select id="hash-algo">
+            <option value="SHA256">SHA-256</option>
+            <option value="SHA512">SHA-512</option>
+            <option value="SHA1">SHA-1</option>
+            <option value="MD5">MD5</option>
+            <option value="SHA3">SHA-3</option>
+            <option value="RIPEMD160">RIPEMD-160</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="lbl">Entrada</label>
+          <textarea id="hash-input" rows="10" placeholder="Digite ou carregue um texto"></textarea>
+          <div class="upload-area">
+            <input type="file" id="hash-file" class="hidden-input" accept=".txt,.json,.xml,.csv" onchange="loadFile('hash-input','hash-file','hash-filename')">
+            <button class="upload-btn" onclick="document.getElementById('hash-file').click()">
+              ↑ <span id="hash-filename">Carregar arquivo</span>
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="genHash()">Gerar hash</button>
+      </div>
+      <div>
+        <div class="output-label">Saída</div>
+        <textarea id="hash-output" class="out" rows="12" readonly placeholder="O hash aparece aqui"></textarea>
+        <div class="field spaced-top">
+          <label class="lbl">Verificar hash</label>
+          <div class="inline-row">
+            <input type="text" id="hash-verify" placeholder="Cole o hash para verificar">
+            <button class="btn btn-outline btn-nowrap" onclick="verifyHash()">Verificar</button>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-outline" onclick="copyResult('hash-output')">Copiar hash</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-actions">
+      <button class="footer-brand-btn" onclick="openMembersModal()">Membros</button>
+      <button class="footer-brand-btn footer-qr-btn" onclick="openQrModal()">QR CODE</button>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Members Modal -->
+<div id="members-modal" class="members-modal" aria-hidden="true" onclick="closeMembersModal(event)">
+  <div class="members-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="members-modal-title">
+    <div class="members-header">
+      <div>
+        <p class="members-kicker">EQUIPE</p>
+        <h2 id="members-modal-title">Membros</h2>
+        <p class="members-subtitle">Exemplos de membros definidos no código. Depois você pode trocar os nomes e fotos direto aqui no arquivo.</p>
+      </div>
+    </div>
+
+    <div class="members-list-wrap">
+      <div class="members-list" id="members-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- QR Modal -->
+<div id="qr-modal" class="members-modal" aria-hidden="true" onclick="closeQrModal(event)">
+  <div class="members-modal-dialog qr-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+    <div class="members-header">
+      <div>
+        <p class="members-kicker">REPOSITÓRIO</p>
+        <h2 id="qr-modal-title">QR Code</h2>
+        <p class="members-subtitle">Escaneie o código para abrir o repositório do HashMax no GitHub.</p>
+      </div>
+      <button class="btn btn-outline btn-block members-top-btn" onclick="closeQrModal()">Fechar</button>
+    </div>
+
+    <div class="qr-card">
+      <img
+        class="qr-image"
+        src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=https%3A%2F%2Fgithub.com%2Fjotavedreis%2Fcriptografia-HASHMAX"
+        alt="QR Code do repositório GitHub do HashMax"
+      >
+      <a class="qr-link" href="https://github.com/jotavedreis/criptografia-HASHMAX" target="_blank" rel="noopener noreferrer">
+        https://github.com/jotavedreis/criptografia-HASHMAX
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- History Drawer -->
+<div id="history-overlay" onclick="closeHistoryOverlay(event)">
+  <div id="history-drawer">
+    <div class="drawer-header">
+      <span class="drawer-title">Histórico</span>
+      <button class="drawer-close" onclick="closeHistory()">✕</button>
+    </div>
+    <div class="drawer-body" id="history-body">
+      <div class="history-empty">Ainda não há operações</div>
+    </div>
+    <div class="history-footer">
+      <button class="btn btn-danger btn-block" onclick="clearHistory()">Limpar histórico</button>
+    </div>
+  </div>
+</div>
+
+<div id="loading-overlay" aria-hidden="true">
+  <div class="loading-card" role="status" aria-live="polite">
+    <div class="loading-spinner" aria-hidden="true"></div>
+    <div class="loading-text">Processando...</div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
